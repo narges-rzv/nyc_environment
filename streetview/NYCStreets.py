@@ -4,7 +4,7 @@ import urllib.request
 import urllib.parse
 
 
-def query_api(keyfile='streetview_key.secret', addresslist=['227 east 30st, NY', '220 east 30th street, NYC 10016']):
+def query_api(keyfile='../private/streetview_key.secret', addresslist=['227 east 30st, NY', '220 east 30th street, NYC 10016']):
     try:
         keystr = open(keyfile).readline().strip()
     except:
@@ -49,7 +49,7 @@ def street_view_save(address='227 east 30st, NY 10016', gmaps = None, keystr1 = 
     urllib.request.urlretrieve(MyUrl, fname)
     print(fname, MyUrl)
 
-def crowl_and_save(toplat=40.9229, toplon=-73.9949, botlat=40.5322, botlon=-73.5453, step=0.0005, keyfile1='streetview_key.secret'):
+def crowl_and_save(toplat=40.9229, toplon=-73.9949, botlat=40.5322, botlon=-73.5453, step=0.005, keyfile1='../private/streetview_key.secret',fout = 'address_lat_long.txt'):
     try:
         keystr1 = open(keyfile1).readline().strip()
     except:
@@ -58,7 +58,7 @@ def crowl_and_save(toplat=40.9229, toplon=-73.9949, botlat=40.5322, botlon=-73.5
     gmaps = googlemaps.Client(key=keystr1)
     l1, l2 = toplat, toplon
     i = 0
-
+    outfile = open(fout, 'w')
     while l1 >= botlat:
         l1 -= step
         while l2 <= botlon:
@@ -69,7 +69,15 @@ def crowl_and_save(toplat=40.9229, toplon=-73.9949, botlat=40.5322, botlon=-73.5
                 print(address)
                 street_view_save(address, gmaps, keystr1)                
                 i += 1
-                print(i)
+                outfile.write(str(i) + '|' + str(l1) + '|' + str(l2) + '|' + address + '\n')
+                outfile.flush()
             except:
                 continue
-    
+
+def create_lat_lon_list( toplat=40.9229, toplon=-73.9949, botlat=40.5322, botlon=-73.5453, step=0.005):
+    l1, l2 = toplat, toplon
+    while l1 >= botlat:
+        l1 -= step
+        while l2 <= botlon:
+            l2 += step 
+            #if (l1,l2) in  
