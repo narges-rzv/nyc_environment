@@ -44,7 +44,7 @@ class NYCStreetViewer(object):
         dirname = os.path.join(os.path.join(str(dir_target), folder_a), folder_b)
         if not os.path.exists(dirname):
             os.makedirs(dirname)
-        filename = os.path.join(dirname, "{0}.latlon.txt".format(dindex))
+        filename = os.path.join(dirname, "{0:09}.latlon.json".format(dindex))
         if os.path.exists(filename):
             print(filename, ' already exists.')
         else:
