@@ -35,7 +35,7 @@ class NYCStreetViewer(object):
                     print('no streetview for', metaUrl, outMeta)
 
 
-    def crowl_and_save_single(self, latlonitem=None, dir_target='../dumps/'):
+    def crawl_and_save_single(self, latlonitem=None, dir_target='../dumps/'):
         if self.keystr == None:
             raise ValueError('error with gmapsAPI object :( aborting.')
         ((l1, l2), dindex) = latlonitem
@@ -59,14 +59,17 @@ class NYCStreetViewer(object):
                 print('error with item:', latlonitem)
                 raise
 
-    def parallel_crowl(self, listlocs):
+    def parallel_crawl(self, listlocs):
         p = Pool()
-        p.map(self.crowl_and_save_single, listlocs)
+        p.map(self.crawl_and_save_single, listlocs)
 
     def load_lat_lon_list(self, picklefile='../private/lat_lon_to_sample.pkl'):
         with open(picklefile, 'rb') as pf:
             listlocs = pickle.load(pf)
-            listlocs = listlocs[:10]
             return listlocs
 
+if __name__ == '__main__':
+    mynyc = NYCStreetViewer()
+    latlonlist = mynyc.load_lat_lon_list()
+    mynyc.parallel_crawl(latlonlist)
 
